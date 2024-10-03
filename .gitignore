@@ -5,3 +5,9 @@ mysql/*
 
 node/node_modules
 node/package-lock.json
+
+challengers/nginx_with_node/node/node_modules
+challengers/nginx_with_node/node/package-lock.json
+
+challengers/nginx_with_node/mysql/*
+!challengers/nginx_with_node/mysql/.gitkeep

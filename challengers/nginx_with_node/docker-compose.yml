@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  db_challenge:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db_challenge
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: db_challenge
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - challenge_network
+
+  app_challenge:
+    build: 
+      context: ./node
+    image: alyssonvitor500/app_challenge:latest
+    container_name: app_challenge
+    tty: true
+    volumes:
+      - ./node:/user/src/app
+    networks:
+      - challenge_network
+    entrypoint: dockerize -wait tcp://db_challenge:3306 -timeout 20s ./initserver.sh
+    depends_on:
+      - db_challenge
+
+  nginx_challenge:
+    build:
+      context: ./nginx 
+    image: alyssonvitor500/nginx_challenge:latest
+    container_name: nginx_challenge
+    ports:
+      - "8080:80"
+    tty: true
+    networks:
+      - challenge_network
+
+networks:
+  challenge_network:
+    driver: bridge
