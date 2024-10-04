@@ -5,6 +5,15 @@ import { config } from './database/config.js'
 const port = 3000
 const app = express()
 
+const connectionTable = mysql.createConnection(config)
+const sqlCreateTable = `
+    CREATE TABLE IF NOT EXISTS people (
+        id int primary key auto_increment,
+        name varchar(255) not null
+    )
+`
+connectionTable.query(sqlCreateTable)
+connectionTable.end()
 
 const connectionInsert = mysql.createConnection(config)
 const sqlInsert = `INSERT INTO people (name) VALUES ('Marcos Vinicios')`
