@@ -25,6 +25,8 @@ services:
     tty: true
     volumes:
       - ./node:/user/src/app
+    ports:
+      - "3000:3000"
     networks:
       - challenge_network
     entrypoint: dockerize -wait tcp://db_challenge:3306 -timeout 20s ./initserver.sh
